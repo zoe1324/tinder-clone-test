@@ -23,9 +23,12 @@ const styles = StyleSheet.create({
     card:{
         width: '100%',
         height: '100%',
+        borderRadius: 10,
+        backgroundColor: '#fefefe',
+
         // overflow: 'hidden', //breaks it
         //
-        shadowColor: "#000", //useless
+        shadowColor: "#000",
         shadowOffset: {
             width: 0,
             height: 5,
@@ -33,8 +36,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.36,
         shadowRadius: 6.68,
         elevation: 11,
-        //
-        // backgroundColor: 'red', //does nothing here
     },
     cardInner: {
         padding: 20,
