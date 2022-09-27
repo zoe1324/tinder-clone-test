@@ -21,12 +21,11 @@ const Card = props => {
 
 const styles = StyleSheet.create({
     card:{
-        width: '95%',
-        height: '65%',
-        borderRadius: 11,
-        overflow: 'hidden',
-
-        shadowColor: "#000",
+        width: '100%',
+        height: '100%',
+        // overflow: 'hidden', //breaks it
+        //
+        shadowColor: "#000", //useless
         shadowOffset: {
             width: 0,
             height: 5,
@@ -34,12 +33,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.36,
         shadowRadius: 6.68,
         elevation: 11,
+        //
+        // backgroundColor: 'red', //does nothing here
     },
     cardInner: {
         padding: 20,
     },
     image: {
-
         //shadow not working well with opacity
         //apple shadow
         shadowColor: "#000",
@@ -52,11 +52,14 @@ const styles = StyleSheet.create({
 
         //android shadow
         elevation: 11,
+        borderRadius: 11,
 
         width: '100%',
         height: '100%',
         justifyContent: 'flex-end',
         overflow: "hidden",
+
+        backgroundColor: '#FFFF',
     },
     name:{
         fontSize: 30,
