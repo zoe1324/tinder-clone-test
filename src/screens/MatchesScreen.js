@@ -1,8 +1,9 @@
 import React from 'react'
-import {View, Text, StyleSheet, SafeAreaView, Image} from 'react-native'
+import {View, Text, StyleSheet, Image} from 'react-native'
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import AnimatedStack from "../components/animatedStack";
 import users from "../../assets/data/users";
+import {SafeAreaView} from "react-native-safe-area-context";
 import {StatusBar} from "expo-status-bar";
 
 
