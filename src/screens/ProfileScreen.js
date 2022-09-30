@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, Image, Pressable, TextInput} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import {View, Text, StyleSheet, Image, Pressable, TextInput, Alert} from 'react-native'
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import AnimatedStack from "../components/animatedStack";
 import users from "../../assets/data/users";
@@ -10,10 +10,36 @@ import {Picker} from '@react-native-picker/picker'
 import {User} from '../models/';
 
 const ProfileScreen = () => {
+
+    const [user, setUser] = useState(null);
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
-    const [gender, setGender] = useState('')
-    const [lookingFor, setLookingFor] = useState('')
+    const [gender, setGender] = useState('');
+    const [lookingFor, setLookingFor] = useState('');
+
+    //If user already exists, update the name, bio, gender and lookingFor attributes in db.
+    useEffect(() => {
+        const getCurrentUser = async () => {
+            const user = await Auth.currentAuthenticatedUser();
+
+            const dbUsers = await DataStore.query(
+                User,
+                u => u.sub === user.attributes.sub,
+            );
+            if (dbUsers.length < 0){ // No user is found
+                return;
+            }
+
+            const dbUser = dbUsers[0]; //user = first user found in results (the only result)
+            setUser(dbUser);
+
+            setName(dbUser.name);
+            setBio(dbUser.bio);
+            setGender(dbUser.gender);
+            setLookingFor(dbUser.lookingFor);
+        };
+        getCurrentUser();
+    }, []);
 
     const isValid = () => {
         return name && bio && gender && lookingFor;
@@ -25,16 +51,32 @@ const ProfileScreen = () => {
             return;
         }
 
-        const user = await Auth.currentAuthenticatedUser();
-        return;
-        // const newUser = new User({
-        //     name,
-        //     bio,
-        //     gender,
-        //     lookingFor,
-        //     image: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png',
-        // });
-        // DataStore.save(newUser)
+        if (user) {
+
+            const updatedUser = User.copyOf(user, updated => {
+                updated.name = name;
+                updated.bio = bio;
+                updated.gender = gender;
+                updated.lookingFor = lookingFor;
+            })
+
+            await DataStore.save(updatedUser);
+
+        } else {
+            //create a new user
+            const authUser = await Auth.currentAuthenticatedUser();
+            const newUser = new User({
+                sub: authUser.attributes.sub,
+                name,
+                bio,
+                gender,
+                lookingFor,
+                image:
+                    'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png',
+            });
+            await DataStore.save(newUser);
+        }
+        Alert.alert("User saved successfully")
     };
 
 

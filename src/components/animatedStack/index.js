@@ -116,7 +116,7 @@ const AnimatedStack = props => {
                     </Animated.View>
                 </View>
             )}
-            {currentProfile && (
+            {currentProfile ? (
                 <PanGestureHandler onGestureEvent={gestureHandler}>
                     <Animated.View style={[styles.animatedCard, cardStyle]}>
                         <Animated.Image
@@ -132,6 +132,10 @@ const AnimatedStack = props => {
                         {renderItem({item: currentProfile})}
                     </Animated.View>
                 </PanGestureHandler>
+            ) : (
+                <View>
+                    <Text>No more users found!</Text>
+                </View>
             )}
         </GestureHandlerRootView>
     );

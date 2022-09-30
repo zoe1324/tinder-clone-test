@@ -1,21 +1,34 @@
 import 'react-native-gesture-handler';
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {StyleSheet, View} from 'react-native';
 import Card from '../components/card';
-import users from '../../assets/data/users';
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import AnimatedStack from "../components/animatedStack";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import users from "../../assets/data/users";
+import {DataStore} from "aws-amplify";
+import {User} from '../models'
+
 
 const HomeScreen = () => {
 
-    const onSwipeLeft = (user) => {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const fetchedUsers = DataStore.query(User);
+            setUsers(fetchedUsers);
+        };
+        fetchUsers();
+    }, []);
+
+    const onSwipeLeft = user => {
         console.warn("swipe left", user.name)
     };
 
-    const onSwipeRight = (user) => {
+    const onSwipeRight = user => {
         console.warn("swipe right", user.name)
     };
 
