@@ -13,37 +13,40 @@ import {DataStore, Auth} from "aws-amplify";
 
 
 const HomeScreen = () => {
-
     const [users, setUsers] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
         const fetchUsers = async () => {
-            console.log("fetching..");
-            const users = await DataStore.query(
+            setUsers(await DataStore.query(
                 User,
-            );
-            console.log("setting..");
-            console.log(users);
-            setUsers(users);
+            ));
         };
-        fetchUsers().then();
+        fetchUsers();
     }, []);
 
-    const onSwipeLeft = user => {
-        console.warn("swipe left", user.name)
+    const onSwipeLeft = () => {
+        if(!currentUser){
+            return;
+        }
+        console.warn("swipe left", currentUser.name)
     };
 
-    const onSwipeRight = user => {
-        console.warn("swipe right", user.name)
+    const onSwipeRight = () => {
+        if(!currentUser){
+            return;
+        }
+        console.warn("swipe right", currentUser.name)
     };
 
     // console.log(users);
 
     return (
-        <GestureHandlerRootView style={styles.container}>
+        <View style={styles.container}>
             {users && (<AnimatedStack
                 data={users}
                 renderItem={({item}) => <Card user={item} />}
+                setCurrentUser={setCurrentUser}
                 onSwipeLeft={onSwipeLeft}
                 onSwipeRight={onSwipeRight}
             />
@@ -85,7 +88,7 @@ const HomeScreen = () => {
                     />
                 </View>
             </View>
-        </GestureHandlerRootView>
+        </View>
     );
 };
 

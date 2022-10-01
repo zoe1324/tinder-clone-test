@@ -19,7 +19,7 @@ const ROTATION = 60;
 const SWIPE_VELOCITY = 800;
 
 const AnimatedStack = props => {
-    const {data, renderItem, onSwipeLeft, onSwipeRight} = props;
+    const {data, renderItem, onSwipeLeft, onSwipeRight, setCurrentUser} = props;
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [nextIndex, setNextIndex] = useState(currentIndex + 1)
@@ -98,9 +98,14 @@ const AnimatedStack = props => {
             );
 
             const onSwipe = event.velocityX > 0 ? onSwipeRight : onSwipeLeft;
-            onSwipe && runOnJS(onSwipe)(currentProfile);
+            onSwipe && runOnJS(onSwipe)();
         },
     });
+
+    //if currentProfile changes
+    useEffect(() => {
+        setCurrentUser(currentProfile);
+    }, [currentProfile, setCurrentUser]);
 
     useEffect(() => {
         translateX.value = 0;
@@ -117,7 +122,7 @@ const AnimatedStack = props => {
                 </View>
             )}
             {currentProfile ? (
-                <PanGestureHandler>
+                <PanGestureHandler onGestureEvent={gestureHandler}>
                     <Animated.View style={[styles.animatedCard, cardStyle]}>
                         <Animated.Image
                             source={Like}
