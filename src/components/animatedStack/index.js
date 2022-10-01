@@ -117,7 +117,7 @@ const AnimatedStack = props => {
                 </View>
             )}
             {currentProfile ? (
-                <PanGestureHandler onGestureEvent={gestureHandler}>
+                <PanGestureHandler>
                     <Animated.View style={[styles.animatedCard, cardStyle]}>
                         <Animated.Image
                             source={Like}

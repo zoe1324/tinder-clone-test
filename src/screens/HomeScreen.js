@@ -7,9 +7,9 @@ import AnimatedStack from "../components/animatedStack";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import users from "../../assets/data/users";
-import {DataStore} from "aws-amplify";
-import {User} from '../models'
+// import users from "../../assets/data/users";
+import {User} from "../models";
+import {DataStore, Auth} from "aws-amplify";
 
 
 const HomeScreen = () => {
@@ -18,10 +18,15 @@ const HomeScreen = () => {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            const fetchedUsers = DataStore.query(User);
-            setUsers(fetchedUsers);
+            console.log("fetching..");
+            const users = await DataStore.query(
+                User,
+            );
+            console.log("setting..");
+            console.log(users);
+            setUsers(users);
         };
-        fetchUsers();
+        fetchUsers().then();
     }, []);
 
     const onSwipeLeft = user => {
@@ -32,14 +37,17 @@ const HomeScreen = () => {
         console.warn("swipe right", user.name)
     };
 
+    // console.log(users);
+
     return (
         <GestureHandlerRootView style={styles.container}>
-            <AnimatedStack
+            {users && (<AnimatedStack
                 data={users}
                 renderItem={({item}) => <Card user={item} />}
                 onSwipeLeft={onSwipeLeft}
                 onSwipeRight={onSwipeRight}
             />
+                )}
             <View style={styles.icons}>
                 <View style={styles.button}>
                     <FontAwesome
