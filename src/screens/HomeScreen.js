@@ -43,14 +43,13 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            {users && (<AnimatedStack
+            <AnimatedStack
                 data={users}
                 renderItem={({item}) => <Card user={item} />}
                 setCurrentUser={setCurrentUser}
                 onSwipeLeft={onSwipeLeft}
                 onSwipeRight={onSwipeRight}
             />
-                )}
             <View style={styles.icons}>
                 <View style={styles.button}>
                     <FontAwesome
